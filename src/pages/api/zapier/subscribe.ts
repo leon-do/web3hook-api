@@ -4,10 +4,11 @@ import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
 import isAuthorized from "@/utils/isAuthorized";
 
-Moralis.start({
-  apiKey: process.env.MORALIS_API_KEY,
-});
-
+if (!Moralis.Core.isStarted) {
+  Moralis.start({
+    apiKey: process.env.MORALIS_API_KEY,
+  });
+}
 type Data = {
   success: boolean;
 };
