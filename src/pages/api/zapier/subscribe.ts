@@ -51,7 +51,7 @@ async function moralisAdd(_req: NextApiRequest): Promise<string | null> {
     const stream = await Moralis.Streams.add({
       chains: [chains[_req.body.chainId as keyof typeof chains]],
       description: _req.body.webhookUrl,
-      tag: _req.body.webhookUrl,
+      tag: `${_req.body.webhookUrl}?event=${_req.body.event}`,
       abi: !_req.body.abi ? undefined : JSON.parse(_req.body.abi),
       topic0: !_req.body.abi ? undefined : [_req.body.event],
       webhookUrl: `${absoluteUrl(_req).protocol}//${absoluteUrl(_req).host}/api/moralis/hook`,

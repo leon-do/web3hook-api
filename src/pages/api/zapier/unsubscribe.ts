@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Moralis from "moralis";
-import { GetStreamsEvmResponseAdapter } from "@moralisweb3/common-streams-utils";
 import isAuthorized from "@/utils/isAuthorized";
 
 if (!Moralis.Core.isStarted) {
@@ -36,8 +35,6 @@ async function getStreamId(_zapierUrl: string): Promise<string | null> {
   let cursor = undefined;
   do {
     const response: any = await Moralis.Streams.getAll({ limit: 100, cursor: cursor });
-    console.log(response);
-    // console.log(response.jsonResponse);
     const zapierUrl = response.jsonResponse.result.filter((result: any) => result.description.includes(_zapierUrl));
     if (zapierUrl[0]?.id) return zapierUrl[0].id;
     cursor = response.jsonResponse.cursor;
