@@ -5,5 +5,8 @@ export default async function isAuthorized(_license_key: string): Promise<boolea
   const response = await axios.post("https://api.lemonsqueezy.com/v1/licenses/validate", {
     license_key: _license_key,
   });
-  return response.data.valid === true;
+  if (response.data.license_key.expires_at == null) return true;
+  const licenseDate = new Date(response.data.license_key.expires_at);
+  const currentDate = new Date();
+  return licenseDate >= currentDate;
 }
