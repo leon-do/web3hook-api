@@ -11,7 +11,7 @@ type Error = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data[] | Error>) {
   try {
-    const abi = JSON.parse(req.query.abi as string);
+    const abi = req.body.abi;
     const choices = abi
       .filter((item: any) => item.type === "function" && item.stateMutability === "view")
       .map((item: any) => ({
