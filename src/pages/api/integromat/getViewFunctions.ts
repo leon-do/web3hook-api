@@ -11,6 +11,7 @@ type Error = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data[] | Error>) {
   try {
+    console.log("/integromat/getViewFunctions");
     const abi = JSON.parse(req.body.abi);
     const choices = abi
       .filter((item: any) => item.type === "function" && item.stateMutability === "view")
