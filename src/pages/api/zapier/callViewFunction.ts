@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (!provider) return res.status(400).send({ data: "Invalid Chain ID" });
     const contract = new ethers.Contract(address, abi, provider);
     let val;
-    if (args === "") {
+    if (args === "" || !args) {
       val = await contract[func]();
     } else {
       val = await contract[func](...args.split(",").map((arg: string) => arg.trim()));
