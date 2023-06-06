@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import absoluteUrl from "next-absolute-url";
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
+import { CreateStreamEvmOptions } from "@moralisweb3/streams";
 import isAuthorized from "@/utils/isAuthorized";
 
 if (!Moralis.Core.isStarted) {
@@ -47,8 +48,7 @@ async function moralisAdd(_req: NextApiRequest): Promise<string | null> {
   };
 
   try {
-    // https://docs.moralis.io/streams-api/how-to-listen-to-all-erc20-contract-transfers-over-certain-amount-sent-by-specific-address#programmatically
-    const stream = await Moralis.Streams.add({
+    const options: CreateStreamEvmOptions = {
       chains: [chains[_req.body.chainId as keyof typeof chains]],
       description: _req.body.webhookUrl,
       tag: `${_req.body.webhookUrl}?event=${_req.body.event}`,
@@ -58,7 +58,21 @@ async function moralisAdd(_req: NextApiRequest): Promise<string | null> {
       includeContractLogs: true,
       includeNativeTxs: true,
       includeInternalTxs: true,
-    });
+    };
+
+    if (_req.body.abi) {
+      options.advancedOptions = [
+        {
+          topic0: _req.body.event,
+          filter: {
+            [_req.body.parameter_condition]: [_req.body.parameter, _req.body.parameter_value.toLowerCase()],
+          },
+        },
+      ];
+    }
+
+    // https://docs.moralis.io/streams-api/how-to-listen-to-all-erc20-contract-transfers-over-certain-amount-sent-by-specific-address#programmatically
+    const stream = await Moralis.Streams.add(options);
     const { id } = stream.toJSON();
     await Moralis.Streams.addAddress({ id, address: _req.body.address });
     return id;
