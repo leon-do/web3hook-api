@@ -16,16 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const provider = new DefenderRelayProvider({ apiKey, apiSecret });
     const signer = new DefenderRelaySigner({ apiKey, apiSecret }, provider, { speed: "fast" });
     const contract = new ethers.Contract(address, abi, signer);
-    let response: RelayerTransaction;
-    if (args === "") {
-      response = await contract[func](...args.split(",").map((arg: string) => arg.trim()), {
-        value: amount === "" ? amount : 0,
-      });
-    } else {
-      response = await contract[func](...args.split(",").map((arg: string) => arg.trim()), {
-        value: amount === "" ? amount : 0,
-      });
-    }
+    // AI dark wizardry converts `cat, dog, [1,2,3]` to `["cat", "dog", [1,2,3]]`
+    const arg = args ? args.split(/,(?![^\[]*\])/).map((_arg: string) => (_arg.trim().startsWith("[") && _arg.trim().endsWith("]") ? JSON.parse(_arg.trim()) : _arg.trim())) : [];
+    const response: RelayerTransaction = await contract[func](...arg, {
+      value: amount === "" ? amount : 0,
+    });
     return res.status(200).json(response);
   } catch (error) {
     console.error(error);

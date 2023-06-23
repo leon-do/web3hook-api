@@ -15,12 +15,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const provider = providers[chainId];
     if (!provider) return res.status(400).send({ data: "Invalid Chain ID" });
     const contract = new ethers.Contract(address, abi, provider);
-    let val;
-    if (args === "" || !args) {
-      val = await contract[func]();
-    } else {
-      val = await contract[func](...args.split(",").map((arg: string) => arg.trim()));
-    }
+    // AI dark wizardry converts `cat, dog, [1,2,3]` to `["cat", "dog", [1,2,3]]`
+    const arg = args ? args.split(/,(?![^\[]*\])/).map((_arg: string) => (_arg.trim().startsWith("[") && _arg.trim().endsWith("]") ? JSON.parse(_arg.trim()) : _arg.trim())) : [];
+    const val = await contract[func](...arg);
     return res.status(200).send({ data: val.toString() });
   } catch (error: any) {
     console.error(error);
