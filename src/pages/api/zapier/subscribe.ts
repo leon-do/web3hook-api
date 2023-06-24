@@ -46,6 +46,7 @@ async function moralisAdd(_req: NextApiRequest): Promise<string | null> {
     "42161": EvmChain.ARBITRUM,
     "10": EvmChain.create("10"), // OPTIMISM
   };
+  if (!chains[_req.body.chainId as keyof typeof chains]) return null;
 
   try {
     const options: CreateStreamEvmOptions = {
