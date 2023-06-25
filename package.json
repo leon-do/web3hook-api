@@ -6,7 +6,7 @@
     "dev": "npm run generate:database && next dev",
     "build": "next build && npm run generate:database",
     "start": "npm run generate:database && next start",
-    "generate:database": "prisma generate --schema=src/prisma/schema.prisma"
+    "generate:database": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.16.1",
