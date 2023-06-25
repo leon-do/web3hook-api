@@ -23,4 +23,6 @@ export const providers: Providers = {
   "10": new ethers.providers.JsonRpcProvider("https://rpc.ankr.com/optimism"),
   "7700": new ethers.providers.JsonRpcProvider("https://canto.slingshot.finance"),
   "7701": new ethers.providers.JsonRpcProvider("https://canto-testnet.plexnode.wtf"),
+  "280": new ethers.providers.JsonRpcProvider("https://testnet.era.zksync.dev"),
+  "324": new ethers.providers.JsonRpcProvider("https://mainnet.era.zksync.io"),
 };
