@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run generate:database && next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "npm run generate:database && next start",
+    "generate:database": "prisma generate --schema=src/prisma/schema.prisma"
   },
   "dependencies": {
-    "@moralisweb3/common-evm-utils": "2.18.1",
+    "@prisma/client": "^4.16.1",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
     "axios": "^1.3.4",
@@ -17,9 +17,8 @@
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
     "ethers": "5.7.2",
-    "moralis": "2.18.1",
     "next": "13.2.4",
-    "next-absolute-url": "^1.2.2",
+    "prisma": "^4.16.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.2"
