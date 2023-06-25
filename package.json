@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run generate:database && next dev",
-    "build": "next build",
+    "build": "next build && npm run generate:database",
     "start": "npm run generate:database && next start",
     "generate:database": "prisma generate --schema=src/prisma/schema.prisma"
   },
